@@ -1,0 +1,8 @@
+{
+  "name": "BrewBuddy",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "c049fbc5"
+}
