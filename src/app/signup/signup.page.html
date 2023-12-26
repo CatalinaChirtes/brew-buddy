@@ -1,13 +1,23 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>signup</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content scroll-y="false">
+  <div class="signup-container">
+    <h1 class="title">Sign Up</h1>
+    <ion-item lines="full" class="input-field">
+      <ion-label position="floating">Name</ion-label>
+      <ion-input type="name" [(ngModel)]="signupForm.name"></ion-input>
+    </ion-item>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">signup</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <ion-item lines="full" class="input-field">
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" [(ngModel)]="signupForm.email"></ion-input>
+    </ion-item>
+
+    <ion-item lines="full" class="input-field">
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" [(ngModel)]="signupForm.password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="signup()" class="signup-button">Sign Up</ion-button>
+
+    <p class="login-link">Already have an account? <a routerLink="/login" class="login-button">Sign In</a></p>
+  </div>
 </ion-content>

@@ -1,8 +1,46 @@
-ion-list {
+.input-field {
+width: 100%;
+--padding-end: 0;
+}
+
+ion-content {
+    --overflow: hidden !important; 
+    height: 100vh; 
+    --keyboard-offset: 0 !important;
+  }
+
+.title {
+    font-size: 2em;
+    font-weight: 500;
+    margin-top: 2em;
+}
+
+.login-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    gap: 1em
-}
+    height: 90vh; 
+    padding: 2em;
+    box-sizing: border-box;
+  }
+
+  .login-button {
+    margin-top: 2em;
+    --background: #5a3535; 
+    color: white;
+    width: 100%;
+  }
+  
+  .signup-link {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9em;
+  }
+
+  .signup-button {
+    color: #5a3535; 
+    text-decoration: none;
+    font-weight: bold;
+  }
+  

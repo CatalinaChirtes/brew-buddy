@@ -1,21 +1,18 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <ion-list [inset]="false" lines="full">
-    <ion-item>
-      <ion-input placeholder="Username"></ion-input>
-    </ion-item>
-  
-    <ion-item>
-      <ion-input placeholder="Password"></ion-input>
+<ion-content scroll-y="false">
+  <div class="login-container">
+    <h1 class="title">Sign In</h1>
+    <ion-item lines="full" class="input-field">
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" [(ngModel)]="loginForm.email"></ion-input>
     </ion-item>
 
-    <div>
-      <ion-button [routerLink]="['/app']">Login</ion-button>
-    </div>
-  </ion-list>
+    <ion-item lines="full" class="input-field">
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" [(ngModel)]="loginForm.password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="login()" class="login-button">Sign In</ion-button>
+
+    <p class="signup-link">Don't have an account? <a routerLink="/signup" class="signup-button">Sign Up</a></p>
+  </div>
 </ion-content>
