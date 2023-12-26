@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Filter</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()">Clear filters</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let category of categories">
+      <ion-label>{{ category.name }}</ion-label>
+      <ion-checkbox [(ngModel)]="category.checked" class="checkbox"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+  <ion-button expand="full" (click)="applyFilters()" class="filter-button">Apply Filters</ion-button>
+</ion-content>

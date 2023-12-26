@@ -3,6 +3,11 @@
     <ion-title>
       Profile
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -13,5 +18,20 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Profile page"></app-explore-container>
+  <ion-card>
+    <ion-card-content>
+      <ion-avatar>
+        <img *ngIf="userProfile.picture" [src]="userProfile.picture" />
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" /> 
+      </ion-avatar>
+      <ion-item>
+        <ion-label>Name</ion-label>
+        <ion-input [(ngModel)]="userProfile.name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Email</ion-label>
+        <ion-input [(ngModel)]="userProfile.email"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

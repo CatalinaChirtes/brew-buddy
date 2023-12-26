@@ -1,6 +1,6 @@
 .input-field {
-width: 100%;
---padding-end: 0;
+    width: 100%;
+    --padding-end: 0;
 }
 
 ion-content {
@@ -20,27 +20,27 @@ ion-content {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 90vh; 
+    height: 100vh; 
     padding: 2em;
     box-sizing: border-box;
-  }
+}
 
-  .login-button {
-    margin-top: 2em;
-    --background: #5a3535; 
-    color: white;
-    width: 100%;
-  }
-  
-  .signup-link {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 0.9em;
-  }
+.login-button {
+  margin-top: 2em;
+  --background: #5a3535; 
+  color: white;
+  width: 100%;
+}
 
-  .signup-button {
-    color: #5a3535; 
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
+.signup-link {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.signup-button {
+  color: #5a3535; 
+  text-decoration: none;
+  font-weight: bold;
+}
+

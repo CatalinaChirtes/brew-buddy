@@ -1,8 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Discover
-    </ion-title>
+    <ion-searchbar [(ngModel)]="searchQuery" (ionChange)="filterItems()" slot="start"></ion-searchbar>
+
+    <ion-buttons slot="end">
+      <ion-button #filterButton (click)="openFilters()">
+        <ion-icon slot="icon-only" name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -13,5 +17,27 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Discover page"></app-explore-container>
+  <ng-container *ngIf="filteredTeas.length > 0; else noTeas">
+    <ion-card *ngFor="let tea of filteredTeas" class="custom-card">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <img [src]="tea.imageURL" class="custom-image" />
+            </ion-col>
+            <ion-col size="6">
+              <ion-card-title>{{ tea.name }}</ion-card-title>
+              <ion-card-subtitle>{{ tea.category }}</ion-card-subtitle>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #noTeas>
+    <div class="no-teas-message">
+      No available teas in this category.
+    </div>
+  </ng-template>
 </ion-content>

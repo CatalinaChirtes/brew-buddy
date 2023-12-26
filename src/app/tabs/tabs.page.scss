@@ -1,1 +1,9 @@
 
+ion-tab-button.tab-selected ion-label {
+    font-weight: bold;
+  }
+  
+  /* Increase font size for selected tab icon */
+  ion-tab-button.tab-selected ion-icon {
+    --ionicon-stroke-width: 40px;
+  }
