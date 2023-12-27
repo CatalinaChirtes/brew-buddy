@@ -5,37 +5,35 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class UserService {
-  private users: any[] = [];
-  private loggedInUser: any = null;
-
   constructor(private router: Router) {}
 
   getUsers(): any[] {
-    return this.users;
+    const usersData = localStorage.getItem('users');
+    return usersData ? JSON.parse(usersData) : [];
   }
 
   getUserByEmail(email: string): any {
-    return this.users.find((user) => user.email === email);
+    const users = this.getUsers();
+    return users.find((user: any) => user.email === email);
   }
 
   addUser(user: any): void {
-    this.users.push(user);
+    const users = this.getUsers();
+    users.push(user);
+    localStorage.setItem('users', JSON.stringify(users));
   }
 
-  // Function to set the logged-in user
   setLoggedInUser(user: any): void {
-    this.loggedInUser = user;
+    localStorage.setItem('loggedInUser', JSON.stringify(user));
   }
 
-  // Function to get the logged-in user
   getLoggedInUser(): any {
-    return this.loggedInUser;
+    const loggedInUserData = localStorage.getItem('loggedInUser');
+    return loggedInUserData ? JSON.parse(loggedInUserData) : null;
   }
 
-  // Function to log out the user
   logout(): void {
-    // Clear the logged-in user when logging out
-    this.loggedInUser = null;
+    localStorage.removeItem('loggedInUser');
     this.router.navigate(['/login']);
   }
 }

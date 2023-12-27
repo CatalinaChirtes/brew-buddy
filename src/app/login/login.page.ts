@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserService } from '../services/user.service'; // Adjust the path accordingly
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +19,7 @@ export class LoginPage {
     private snackBar: MatSnackBar,
     private userService: UserService
   ) {
-    this.userService.addUser({ email: 'user@gmail.com', password: '1234' });
+    this.userService.addUser({ name: 'User', email: 'user@gmail.com', password: '1234' });
   }
 
   login() {
@@ -27,7 +27,6 @@ export class LoginPage {
     const user = this.userService.getUserByEmail(email);
 
     if (user && user.password === password) {
-      // Authentication successful, navigate to another page (e.g., dashboard)
       this.router.navigate(['/app']);
 
       this.loginForm = {
@@ -36,7 +35,6 @@ export class LoginPage {
       };
       
     } else {
-      // Invalid credentials, display error using snackbar
       this.snackBar.open('Invalid credentials', 'Close', {
         duration: 3000,
         horizontalPosition: 'center',

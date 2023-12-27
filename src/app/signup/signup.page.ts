@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserService } from '../services/user.service'; // Adjust the path accordingly
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,7 +18,7 @@ export class SignupPage {
   constructor(
     private router: Router,
     private snackBar: MatSnackBar,
-    private userService: UserService // Inject UserService
+    private userService: UserService
   ) {}
 
   signup() {
@@ -27,17 +27,16 @@ export class SignupPage {
     const existingUser = this.userService.getUserByEmail(email);
 
     if (existingUser) {
-      // User already exists, display error using snackbar
       this.snackBar.open('User already exists', 'Close', {
         duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'bottom',
       });
     } else {
-      // Add the new user using UserService
-      this.userService.addUser({ name, email, password });
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      users.push({ name, email, password });
+      localStorage.setItem('users', JSON.stringify(users));
 
-      // Show success message and navigate to the login page after successful signup
       this.snackBar.open('Signup successful', 'Close', {
         duration: 3000,
         horizontalPosition: 'center',
@@ -50,7 +49,7 @@ export class SignupPage {
         password: '',
       };
 
-      this.router.navigate(['/login']); // Navigate only if user doesn't exist
+      this.router.navigate(['/login']);
     }
   }
 }
