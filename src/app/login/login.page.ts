@@ -28,6 +28,7 @@ export class LoginPage {
 
     if (user && user.password === password) {
       this.router.navigate(['/app']);
+      this.userService.setLoggedInUser(user);
 
       this.loginForm = {
         email: '',

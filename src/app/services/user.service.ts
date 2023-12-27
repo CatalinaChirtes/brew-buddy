@@ -24,16 +24,44 @@ export class UserService {
   }
 
   setLoggedInUser(user: any): void {
-    localStorage.setItem('loggedInUser', JSON.stringify(user));
+    try {
+      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      console.log('User data successfully stored.');
+    } catch (error) {
+      console.error('Error storing user data:', error);
+    }
   }
-
+  
   getLoggedInUser(): any {
-    const loggedInUserData = localStorage.getItem('loggedInUser');
-    return loggedInUserData ? JSON.parse(loggedInUserData) : null;
+    try {
+      const loggedInUserData = localStorage.getItem('loggedInUser');
+      console.log('Raw logged in user data:', loggedInUserData);
+  
+      if (loggedInUserData) {
+        const parsedData = JSON.parse(loggedInUserData);
+        console.log('Parsed logged in user data:', parsedData);
+        return parsedData;
+      } else {
+        console.warn('No logged in user data found.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error retrieving user data:', error);
+      return null;
+    }
   }
 
   logout(): void {
     localStorage.removeItem('loggedInUser');
     this.router.navigate(['/login']);
+  }
+
+  getTeasForUser(email: string): { favoriteTeas: any[]; ownedTeas: any[] } | null {
+    const userTeasData = localStorage.getItem(`userTeas_${email}`);
+    return userTeasData ? JSON.parse(userTeasData) : null;
+  }
+
+  setTeasForUser(email: string, teasForUser: { favoriteTeas: any[]; ownedTeas: any[] }): void {
+    localStorage.setItem(`userTeas_${email}`, JSON.stringify(teasForUser));
   }
 }
