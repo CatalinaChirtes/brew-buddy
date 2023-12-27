@@ -1,11 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   constructor(private router: Router) {}
+
+  private loginSubject = new Subject<void>();
+
+  // Method to notify login
+  notifyLogin() {
+    this.loginSubject.next();
+  }
+
+  // Method to subscribe to login events
+  onLogin() {
+    return this.loginSubject.asObservable();
+  }
 
   getUsers(): any[] {
     const usersData = localStorage.getItem('users');

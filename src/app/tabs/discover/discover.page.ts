@@ -1,5 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { FilterModalPage } from 'src/app/filter-modal/filter-modal.page';
 import { UserService } from 'src/app/services/user.service';
 
@@ -8,7 +9,7 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: 'discover.page.html',
   styleUrls: ['discover.page.scss']
 })
-export class DiscoverPage {
+export class DiscoverPage implements OnInit, OnDestroy {
   @ViewChild('filterButton') filterButton: any;
 
   categories: { name: string, checked: boolean }[] = [
@@ -22,6 +23,7 @@ export class DiscoverPage {
 
   loggedInUserEmail!: string;
   teasForUser: { favoriteTeas: any[]; ownedTeas: any[] } | null = null;
+  private loginSubscription: Subscription | undefined;
 
   constructor(
     private modalController: ModalController,
@@ -29,7 +31,15 @@ export class DiscoverPage {
   ) {}
 
   ngOnInit() {
-    this.fetchUserData();
+    this.loginSubscription = this.userService.onLogin().subscribe(() => {
+      this.fetchUserData();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.loginSubscription) {
+      this.loginSubscription.unsubscribe();
+    }
   }
 
   teas = [
@@ -50,7 +60,6 @@ export class DiscoverPage {
         this.categories.find(category => category.checked && category.name === tea.category)
       );
     } else {
-      // If no categories are selected, display all items
       this.filteredTeas = this.teas.filter(tea =>
         tea.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
@@ -67,15 +76,13 @@ export class DiscoverPage {
 
     modal.onDidDismiss().then((data) => {
       if (data && data.data && data.data.categories) {
-        // Update categories based on modal result
         this.categories = data.data.categories;
-        this.filterItems(); // Reapply filters after category changes
+        this.filterItems();
       } else {
-        // If no categories are returned (i.e., modal dismissed without changes), show all items
-        this.categories.forEach(cat => cat.checked = false); // Uncheck all categories
-        this.filterItems(); // Show all items
+        this.categories.forEach(cat => cat.checked = false); 
+        this.filterItems();
       }
-      this.setFocusOnButton(); // Set focus back to the filter button
+      this.setFocusOnButton(); 
     });
 
     return await modal.present();
@@ -100,8 +107,6 @@ export class DiscoverPage {
           ownedTeas: []
         };
       }
-  
-      // Update filteredTeas based on the user's preferences
       this.updateFilteredTeas();
     }
   }
@@ -111,7 +116,6 @@ export class DiscoverPage {
     const favoriteTeaNames = favoriteTeas.map(tea => tea.name);
     const ownedTeaNames = ownedTeas.map(tea => tea.name);
   
-    // Filter teas based on user preferences
     this.filteredTeas = this.teas.filter(tea => {
       if (favoriteTeaNames.includes(tea.name)) {
         tea.favorite = true;
@@ -134,6 +138,8 @@ export class DiscoverPage {
     if (tea.favorite) {
       tea.owned = false;
       this.updateTeaData(tea);
+    } else {
+      this.removeTeaFromLists(tea);
     }
   }
 
@@ -142,7 +148,30 @@ export class DiscoverPage {
     if (tea.owned) {
       tea.favorite = false;
       this.updateTeaData(tea);
+    } else {
+      this.removeTeaFromLists(tea);
     }
+  }
+
+  private removeTeaFromLists(tea: any) {
+    if (!this.teasForUser) {
+      return;
+    }
+
+    const updatedFavoriteTeas = (this.teasForUser.favoriteTeas || []).filter(
+      (t: any) => t.name !== tea.name
+    );
+    const updatedOwnedTeas = (this.teasForUser.ownedTeas || []).filter(
+      (t: any) => t.name !== tea.name
+    );
+
+    this.teasForUser = {
+      favoriteTeas: updatedFavoriteTeas,
+      ownedTeas: updatedOwnedTeas,
+    };
+
+    this.userService.setTeasForUser(this.loggedInUserEmail, this.teasForUser);
+    this.updateFilteredTeas();
   }
 
   private updateTeaData(tea: any) {
