@@ -13,5 +13,18 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Timer page"></app-explore-container>
+  <div class="timer-container">
+    <div class="timer-circle">
+      <div class="timer-text">{{ displayTime }}</div>
+    </div>
+    <div class="controls">
+      <ion-input *ngIf="!timerRunning && !timerStopped" type="number" [(ngModel)]="customDuration" placeholder="Enter duration"></ion-input>
+      <ion-button *ngIf="!timerRunning && !timerStopped" (click)="setCustomDuration()">Set Duration</ion-button>
+      <ion-button *ngIf="!timerRunning && !timerStopped" (click)="startTimer()">Start</ion-button>
+      <ion-button *ngIf="timerRunning && !timerStopped" (click)="pauseTimer()">Pause</ion-button>
+      <ion-button *ngIf="timerStopped" (click)="continueTimer()">Continue</ion-button>
+      <ion-button *ngIf="timerRunning" (click)="resetTimer()">Reset</ion-button>
+    </div>
+  </div>
+  
 </ion-content>

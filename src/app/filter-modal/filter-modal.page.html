@@ -11,7 +11,7 @@
   <ion-list>
     <ion-item *ngFor="let category of categories">
       <ion-label>{{ category.name }}</ion-label>
-      <ion-checkbox [(ngModel)]="category.checked" class="checkbox"></ion-checkbox>
+      <ion-checkbox [(ngModel)]="category.checked"></ion-checkbox>
     </ion-item>
   </ion-list>
   <ion-button expand="full" (click)="applyFilters()" class="filter-button">Apply Filters</ion-button>
