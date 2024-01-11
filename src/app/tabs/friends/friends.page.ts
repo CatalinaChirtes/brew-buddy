@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserModel } from 'src/app/core/_models/users/UserModel';
+import { UsersService } from 'src/app/core/_services/UsersServices.service';
 
 @Component({
   selector: 'app-friends',
@@ -7,6 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FriendsPage {
 
-  constructor() { }
+  public users: UserModel[] = [];
 
+  constructor(
+    private usersService: UsersService
+  ) {}
+
+  async ngOnInit() {
+    this.usersService.ApiUsersGetAll().subscribe( response => console.log(response))
+  }
 }
