@@ -3,17 +3,17 @@
     <h1 class="title">Sign Up</h1>
     <ion-item lines="full" class="input-field">
       <ion-label position="floating">Name</ion-label>
-      <ion-input type="name" [(ngModel)]="signupForm.name"></ion-input>
+      <ion-input type="name" [(ngModel)]="signupUser.name"></ion-input>
     </ion-item>
 
     <ion-item lines="full" class="input-field">
       <ion-label position="floating">Email</ion-label>
-      <ion-input type="email" [(ngModel)]="signupForm.email"></ion-input>
+      <ion-input type="email" [(ngModel)]="signupUser.email"></ion-input>
     </ion-item>
 
     <ion-item lines="full" class="input-field">
       <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" [(ngModel)]="signupForm.password"></ion-input>
+      <ion-input type="password" [(ngModel)]="signupUser.password"></ion-input>
     </ion-item>
 
     <ion-button expand="block" (click)="signup()" class="signup-button">Sign Up</ion-button>

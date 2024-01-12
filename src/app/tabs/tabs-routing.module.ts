@@ -28,11 +28,20 @@ const routes: Routes = [
         loadChildren: () => import('./timer/timer.module').then( m => m.TimerPageModule)
       },
       {
+        path: 'filter-modal',
+        loadChildren: () => import('../filter-modal/filter-modal.module').then( m => m.FilterModalPageModule)
+      },
+      {
+        path: 'tea',
+        loadChildren: () => import('../tea/tea.module').then( m => m.TeaPageModule)
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full'
       }
-    ]
+    ],
+    // canActivate: [AuthGuard]
   },
 ];
 

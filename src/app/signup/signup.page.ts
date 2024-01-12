@@ -1,15 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../services/user.service';
+import { UserInputModel } from '../core/_models/auth/UserInputModel';
+import { UsersService } from '../core/_services/UsersServices.service';
+import { AuthService } from '../core/_services/AuthService.service';
 
 @Component({
   selector: 'app-signup',
   templateUrl: 'signup.page.html',
   styleUrls: ['signup.page.scss'],
 })
-export class SignupPage {
-  signupForm = {
+export class SignupPage implements OnInit {
+  public signupUser: UserInputModel = {
     name: '',
     email: '',
     password: '',
@@ -18,38 +21,40 @@ export class SignupPage {
   constructor(
     private router: Router,
     private snackBar: MatSnackBar,
-    private userService: UserService
+    private authService: AuthService,
+    private usersService: UsersService
   ) {}
 
-  signup() {
-    const { name, email, password } = this.signupForm;
+  ngOnInit(): void {}
 
-    const existingUser = this.userService.getUserByEmail(email);
+  public signup(): void {
+    this.authService.ApiSignupPost(this.signupUser).subscribe(
+      (response) => {
+        console.log(response);
+        this.router.navigate(['/login']);
 
-    if (existingUser) {
-      this.snackBar.open('User already exists', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-      });
-    } else {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      users.push({ name, email, password });
-      localStorage.setItem('users', JSON.stringify(users));
+        this.snackBar.open("Signed up successfully.", 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+        });
 
-      this.snackBar.open('Signup successful', 'Close', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-      });
+        return response;
+      },
+      (error) => {
+        console.error(error);
+        let errorMessage = 'An error occurred';
+        
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        }
 
-      this.signupForm = {
-        name: '',
-        email: '',
-        password: '',
-      };
-
-      this.router.navigate(['/login']);
-    }
+        this.snackBar.open(errorMessage, 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+        });
+      }
+    );
   }
 }
