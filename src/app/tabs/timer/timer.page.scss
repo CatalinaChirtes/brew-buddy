@@ -8,12 +8,15 @@
   
   .timer-circle {
     position: relative;
-    width: 24em;
-    height: 24em;
+    width: 70vw;
+    height: 70vw;
+    max-width: 60em; 
+    max-height: 60em;
     border-radius: 50%;
     overflow: hidden;
     background-color: #ffffff;
     border: 15px solid #5a3535;
+    margin-bottom: 2em;
   }
   
   .timer-text {
@@ -21,7 +24,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 3em; 
+    font-size: 10vw; 
   }
   
   .controls {
@@ -33,7 +36,7 @@
   }
   
   ion-input {
-    width: 10em;
+    width: 5em;
     border-bottom: 1px solid #5a3535;
   }
   
