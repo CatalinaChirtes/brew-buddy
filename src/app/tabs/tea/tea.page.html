@@ -1,0 +1,67 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="navigateToDiscover()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ tea?.tea_id }}: {{ tea?.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card *ngIf="tea" class="custom-card">
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="5">
+            <ion-img [src]="tea.image" alt="Tea Image"></ion-img>
+          </ion-col>
+          <ion-col size="7" class="tea_img">
+            <ion-card-title>{{ tea.name }}</ion-card-title>
+            <ion-card-subtitle><b>Type:</b> {{ tea.type }}</ion-card-subtitle>
+            <ion-card-subtitle><b>Ingredients:</b> {{ tea.ingredients }}</ion-card-subtitle>
+            <ion-card-subtitle><b>Preparation Method:</b> {{ tea.prep_method }}</ion-card-subtitle>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card class="custom-card custom-card-2">
+          <div class="timer-container">
+            <ion-card-subtitle class="timer_text">Minimum Infusion Time</ion-card-subtitle>
+            <div class="timer-circle">
+              <div class="timer-text">{{ displayMinTime }}</div>
+            </div>
+            <div class="controls">
+              <ion-button *ngIf="!timerMinRunning && !timerMinStopped" (click)="startMinTimer()" class="timer_button">Start</ion-button>
+              <ion-button *ngIf="timerMinRunning && !timerMinStopped" (click)="pauseMinTimer()" class="timer_button">Pause</ion-button>
+              <ion-button *ngIf="timerMinStopped" (click)="continueMinTimer()" class="timer_button">Continue</ion-button>
+              <ion-button *ngIf="timerMinRunning" (click)="resetMinTimer()" class="timer_button">Reset</ion-button>
+            </div>
+          </div>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card class="custom-card custom-card-2">
+          <div class="timer-container">
+            <ion-card-subtitle class="timer_text">Maximum Infusion Time</ion-card-subtitle>
+            <div class="timer-circle">
+              <div class="timer-text">{{ displayMaxTime }}</div>
+            </div>
+            <div class="controls">
+              <ion-button *ngIf="!timerMaxRunning && !timerMaxStopped" (click)="startMaxTimer()" class="timer_button">Start</ion-button>
+              <ion-button *ngIf="timerMaxRunning && !timerMaxStopped" (click)="pauseMaxTimer()" class="timer_button">Pause</ion-button>
+              <ion-button *ngIf="timerMaxStopped" (click)="continueMaxTimer()" class="timer_button">Continue</ion-button>
+              <ion-button *ngIf="timerMaxRunning" (click)="resetMaxTimer()" class="timer_button">Reset</ion-button>
+            </div>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+

@@ -19,10 +19,10 @@ const routes: Routes = [
         path: 'profile',
         loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule)
       },
-      {
-        path: 'friends',
-        loadChildren: () => import('./friends/friends.module').then(m => m.FriendsPageModule)
-      },
+      // {
+      //   path: 'friends',
+      //   loadChildren: () => import('./friends/friends.module').then(m => m.FriendsPageModule)
+      // },
       {
         path: 'timer',
         loadChildren: () => import('./timer/timer.module').then( m => m.TimerPageModule)
@@ -33,7 +33,7 @@ const routes: Routes = [
       },
       {
         path: 'tea',
-        loadChildren: () => import('../tea/tea.module').then( m => m.TeaPageModule)
+        loadChildren: () => import('./tea/tea.module').then( m => m.TeaPageModule)
       },
       {
         path: '',

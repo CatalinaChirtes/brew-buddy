@@ -23,7 +23,7 @@
         <ion-grid>
           <ion-row>
             <ion-col size="6">
-              <img [src]="tea.image" class="custom-image" />
+              <img [src]="tea.image" (click)="navigateToTea(tea)" class="custom-image" />
             </ion-col>
             <ion-col size="6" class="tea_img">
               <ion-card-title>{{ tea.name }}</ion-card-title>

@@ -1,6 +1,6 @@
-import { HttpParameterCodec, HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpParameterCodec, HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable, Optional, Inject } from "@angular/core";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { TeaModel } from "../_models/teas/TeaModel";
 
@@ -17,9 +17,12 @@ export class TeasService {
         return this.http.get<TeaModel[]>(this.baseTeasPath);
     }
 
-    public ApiTeaGet(id: string): Observable<TeaModel[]>{
-        return this.http.get<TeaModel[]>(
-            `${this.baseTeaPath}/${id}`
+    public ApiTeaGet(id: string): Observable<TeaModel>{
+        const params = new HttpParams().set('tea_id', id);
+
+        return this.http.get<TeaModel>(
+            `${this.baseTeaPath}`,
+            { params: params }
         );
     }
 }

@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { TeaModel } from 'src/app/core/_models/teas/TeaModel';
@@ -37,6 +38,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
   constructor(
     private modalController: ModalController,
     private teasService: TeasService,
+    private router: Router,
     private userService: UserService
   ) {}
 
@@ -119,6 +121,12 @@ export class DiscoverPage implements OnInit, OnDestroy {
   clearSearch() {
     this.searchQuery = '';
     this.filterItems();
+  }
+
+  navigateToTea(tea: TeaModel) {
+    console.log('Navigating to tea:', tea);
+    localStorage.setItem('selectedTeaId', tea.id!.toString());
+    this.router.navigate(['/app/tea']);
   }
 
 //   private fetchUserData() {

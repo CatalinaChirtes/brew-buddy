@@ -5,6 +5,4 @@ export interface UserModel {
     name?: string;
     email?: string;
     password?: string;
-    favourite_teas?: Array<TeaModel>;
-    owned_teas?: Array<TeaModel>;
 }
