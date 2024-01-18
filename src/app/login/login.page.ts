@@ -35,6 +35,12 @@ export class LoginPage implements OnInit {
       (response) => {
         console.log(response);
         localStorage.setItem('userId', response.id?.toString() || '');
+
+        this.loginUser = {
+          email: '',
+          password: '',
+        };
+
         this.router.navigate(['/app']);
 
         return response;
