@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { AuthGuard } from '../core/_guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -41,11 +42,12 @@ const routes: Routes = [
         pathMatch: 'full'
       }
     ],
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
+  providers: [AuthGuard]
 })
 export class TabsPageRoutingModule {}
