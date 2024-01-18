@@ -199,6 +199,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
   navigateToTea(tea: TeaModel) {
     console.log('Navigating to tea:', tea);
     localStorage.setItem('selectedTeaId', tea.id!.toString());
-    this.router.navigate(['/app/tea']);
+    this.router.navigate(['/app/tea', { source: 'discover' }]);
   }
 }

@@ -10,6 +10,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class TeaPage implements OnInit {
   public tea!: TeaModel;
+  clickedFavoriteTea: { [key: string]: boolean } = {};
+  clickedOwnedTea: { [key: string]: boolean } = {};
+  public source: string = '';
 
   constructor(
     private teasService: TeasService,
@@ -21,6 +24,12 @@ export class TeaPage implements OnInit {
     this.fetchTea();
     this.setCustomMinDuration();
     this.setCustomMaxDuration();
+
+    this.route.paramMap.subscribe(params => {
+      const sourceParam = params.get('source');
+      this.source = sourceParam !== null ? sourceParam : ''; 
+      console.log('Source:', this.source);
+    });
   }
 
   private fetchTea() {
@@ -32,6 +41,8 @@ export class TeaPage implements OnInit {
         this.teasService.ApiTeaGet(teaId).subscribe(
           (tea: TeaModel) => {
             this.tea = tea;
+
+            this.initializeTeaStates();
 
             if(this.tea.min_infuzion == 0){
               this.displayMinTime = this.formatTime(1 * 60);
@@ -48,11 +59,43 @@ export class TeaPage implements OnInit {
       }
     });
   }
+
+  private initializeTeaStates() {
+    const userId = localStorage.getItem('userId');
+
+    if (userId) {
+      this.clickedFavoriteTea = {};
+      this.clickedOwnedTea = {};
+
+      this.teasService.ApiTeaFavouritesGet(userId).subscribe(
+        (favoriteTeas: TeaModel[]) => {
+          favoriteTeas.forEach(tea => this.clickedFavoriteTea[tea.name!] = true);
+        },
+        (error) => {
+          console.error('Error fetching favorite teas:', error);
+        }
+      );
+
+      this.teasService.ApiTeaOwnedGet(userId).subscribe(
+        (ownedTeas: TeaModel[]) => {
+          ownedTeas.forEach(tea => this.clickedOwnedTea[tea.name!] = true);
+        },
+        (error) => {
+          console.error('Error fetching owned teas:', error);
+        }
+      );
+    }
+  }
   
-  navigateToDiscover() {
+  navigateBack() {
     this.resetMaxTimer();
     this.resetMinTimer();
-    this.router.navigate(['/app/discover']);
+    
+    if (this.source === 'home') {
+      this.router.navigate(['/app/home']);
+    } else if (this.source === 'discover') {
+      this.router.navigate(['/app/discover']);
+    } 
   }
 
   audio: HTMLAudioElement = new Audio('assets/sounds/timer_ding.mp3');
@@ -205,6 +248,62 @@ export class TeaPage implements OnInit {
   ngOnDestroy() {
     clearInterval(this.timerMinId);
     clearInterval(this.timerMaxId);
+  }
+
+  toggleFavorite(tea: TeaModel) {
+    const userId = localStorage.getItem('userId');
+
+    if (userId) {
+      if (this.clickedFavoriteTea[tea.name!]) {
+        // Unfavorite tea
+        this.teasService.ApiTeaFavouritesDelete(tea.id!.toString(), userId).subscribe(
+          () => {
+            this.clickedFavoriteTea[tea.name!] = false;
+          },
+          (error) => {
+            console.error('Error unfavoriting tea:', error);
+          }
+        );
+      } else {
+        // Favorite tea
+        this.teasService.ApiTeaFavouritesPost(tea.id!.toString(), userId).subscribe(
+          () => {
+            this.clickedFavoriteTea[tea.name!] = true;
+          },
+          (error) => {
+            console.error('Error favoriting tea:', error);
+          }
+        );
+      }
+    }
+  }
+
+  toggleOwned(tea: TeaModel) {
+    const userId = localStorage.getItem('userId');
+
+    if (userId) {
+      if (this.clickedOwnedTea[tea.name!]) {
+        // Unown tea
+        this.teasService.ApiTeaOwnedDelete(tea.id!.toString(), userId).subscribe(
+          () => {
+            this.clickedOwnedTea[tea.name!] = false;
+          },
+          (error) => {
+            console.error('Error unowning tea:', error);
+          }
+        );
+      } else {
+        // Own tea
+        this.teasService.ApiTeaOwnedPost(tea.id!.toString(), userId).subscribe(
+          () => {
+            this.clickedOwnedTea[tea.name!] = true;
+          },
+          (error) => {
+            console.error('Error owning tea:', error);
+          }
+        );
+      }
+    }
   }
 }
 

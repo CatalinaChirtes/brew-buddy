@@ -19,11 +19,22 @@
         <ion-grid>
           <ion-row>
             <ion-col size="6">
-              <img [src]="tea.image" (click)="navigateToTea(tea)" class="custom-image" />
-            </ion-col>
-            <ion-col size="6" class="tea_img">
               <ion-card-title>{{ tea.name }}</ion-card-title>
               <ion-card-subtitle>{{ tea.type }}</ion-card-subtitle>
+              <img [src]="tea.image" (click)="navigateToTea(tea)" class="custom-image" />
+            </ion-col>
+            <ion-col size="6">
+              <div class="timer-container">
+                <div class="timer-circle">
+                  <div class="timer-text">{{ teaTimers[tea.id!.toString()].displayMaxTime }}</div>
+                </div>
+                <div class="controls">
+                  <ion-button *ngIf="!teaTimers[tea.id!.toString()].timerMaxRunning && !teaTimers[tea.id!.toString()].timerMaxStopped" (click)="teaTimers[tea.id!.toString()].startMaxTimer()" class="timer_button">Start</ion-button>
+                  <ion-button *ngIf="teaTimers[tea.id!.toString()].timerMaxRunning && !teaTimers[tea.id!.toString()].timerMaxStopped" (click)="teaTimers[tea.id!.toString()].pauseMaxTimer()" class="timer_button">Pause</ion-button>
+                  <ion-button *ngIf="teaTimers[tea.id!.toString()].timerMaxStopped" (click)="teaTimers[tea.id!.toString()].continueMaxTimer()" class="timer_button continue">Continue</ion-button>
+                  <ion-button *ngIf="teaTimers[tea.id!.toString()].timerMaxRunning" (click)="teaTimers[tea.id!.toString()].resetMaxTimer()" class="timer_button">Reset</ion-button>
+                </div>
+              </div>
             </ion-col>
           </ion-row>
         </ion-grid>

@@ -6,3 +6,81 @@
     font-size: 1.2rem;
     color: #555;
 }
+
+ion-card.custom-card {
+    ion-row {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.custom-image {
+    padding-top: 1em;
+    max-width: 60%;
+}
+
+.timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.timer-circle {
+    position: relative;
+    width: 35vw;
+    height: 35vw;
+    max-width: 50em;
+    max-height: 50em;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #ffffff;
+    border: 10px solid #5a3535;
+    margin-bottom: 0em;
+}
+
+.timer-text {
+    color: black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5vw;
+}
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+}
+
+ion-input {
+    width: 5em;
+    border-bottom: 1px solid #5a3535;
+}
+
+ion-button {
+    --background: #5a3535;
+    --color: white;
+    font-size: 0.7rem; 
+    width: 5em; 
+}
+
+.timer_text {
+    padding: 1em;
+}
+
+.timer_button {
+    padding-bottom: 1em;
+    font-size: 0.6rem; 
+    width: 6em; 
+}
+
+.continue{
+    padding-bottom: 1em;
+    font-size: 0.6rem; 
+    width: 7em; 
+}
