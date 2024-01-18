@@ -95,6 +95,8 @@ export class TeaPage implements OnInit {
       this.router.navigate(['/app/home']);
     } else if (this.source === 'discover') {
       this.router.navigate(['/app/discover']);
+    } else if (this.source === 'profile') {
+      this.router.navigate(['/app/profile']);
     } 
   }
 

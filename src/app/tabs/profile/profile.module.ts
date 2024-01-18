@@ -6,6 +6,7 @@ import { ProfilePage } from './profile.page';
 import { ExploreContainerComponentModule } from '../../explore-container/explore-container.module';
 
 import { ProfilePageRoutingModule } from './profile-routing.module';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { ProfilePageRoutingModule } from './profile-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    ProfilePageRoutingModule
+    ProfilePageRoutingModule,
+    MatTabsModule
   ],
   declarations: [ProfilePage]
 })

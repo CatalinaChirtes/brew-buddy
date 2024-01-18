@@ -1,0 +1,76 @@
+ion-card.custom-card {
+  
+    ion-row {
+      display: flex;
+      align-items: center;
+    }
+}
+
+ion-col.tea_img {
+    padding-left: 1em;
+}
+
+.no-teas-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.mat-mdc-tab-group, .mat-mdc-tab-nav-bar {
+    --mdc-tab-indicator-active-indicator-color: #5a3535;
+    --mat-tab-header-disabled-ripple-color: rgba(0, 0, 0, 0.38);
+    --mat-tab-header-pagination-icon-color: #000;
+    --mat-tab-header-inactive-label-text-color: rgba(0, 0, 0, 0.6);
+    --mat-tab-header-active-label-text-color: #5a3535;
+    --mat-tab-header-active-ripple-color: #5a3535;
+    --mat-tab-header-inactive-ripple-color: #5a3535;
+    --mat-tab-header-inactive-focus-label-text-color: rgba(0, 0, 0, 0.6);
+    --mat-tab-header-inactive-hover-label-text-color: rgba(0, 0, 0, 0.6);
+    --mat-tab-header-active-focus-label-text-color: #5a3535;
+    --mat-tab-header-active-hover-label-text-color: #5a3535;
+    --mat-tab-header-active-focus-indicator-color: #5a3535;
+    --mat-tab-header-active-hover-indicator-color: #5a3535;
+}
+
+.mat-primary {
+    --mat-full-pseudo-checkbox-selected-icon-color: #5a3535;
+    --mat-full-pseudo-checkbox-selected-checkmark-color: #fafafa;
+    --mat-full-pseudo-checkbox-unselected-icon-color: rgba(0, 0, 0, 0.54);
+    --mat-full-pseudo-checkbox-disabled-selected-checkmark-color: #fafafa;
+    --mat-full-pseudo-checkbox-disabled-unselected-icon-color: #b0b0b0;
+    --mat-full-pseudo-checkbox-disabled-selected-icon-color: #b0b0b0;
+    --mat-minimal-pseudo-checkbox-selected-checkmark-color: #5a3535;
+    --mat-minimal-pseudo-checkbox-disabled-selected-checkmark-color: #5a3535;
+}
+
+ion-card {
+    .center-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+  
+      ion-avatar {
+        margin-top: 5em;
+        margin-bottom: 10px;
+      }
+  
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 37%; 
+        background-color: #5a3535; 
+        z-index: -1;
+      }
+    }
+  }
+
+  

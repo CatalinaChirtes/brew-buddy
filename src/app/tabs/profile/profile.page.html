@@ -4,6 +4,9 @@
       Profile
     </ion-title>
     <ion-buttons slot="end">
+      <ion-button (click)="openEditProfileAlert()">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
       <ion-button (click)="logout()">
         <ion-icon name="log-out-outline"></ion-icon>
       </ion-button>
@@ -19,19 +22,63 @@
   </ion-header>
 
   <ion-card>
-    <ion-card-content>
+    <ion-card-content class="center-content">
       <ion-avatar>
-        <img *ngIf="userProfile.picture" [src]="userProfile.picture" />
-        <input type="file" (change)="onFileSelected($event)" accept="image/*" /> 
+        <img [src]="userProfile.picture" />
       </ion-avatar>
-      <ion-item>
-        <ion-label>Name</ion-label>
-        <ion-input [(ngModel)]="userProfile.name"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label>Email</ion-label>
-        <ion-input [(ngModel)]="userProfile.email"></ion-input>
-      </ion-item>
+      <ion-card-title>{{ user?.name }}</ion-card-title>
     </ion-card-content>
   </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <mat-tab-group>
+        <mat-tab label="Favourites">
+          <ng-container *ngIf="favouriteTeas.length > 0; else noTeas">
+            <ion-card *ngFor="let tea of favouriteTeas" class="custom-card">
+              <ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="4">
+                      <img [src]="tea.image" (click)="navigateToTea(tea)" class="custom-image" />
+                    </ion-col>
+                    <ion-col size="8">
+                      <ion-card-title>{{ tea.name }}</ion-card-title>
+                      <ion-card-subtitle>{{ tea.type }}</ion-card-subtitle>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </ng-container>
+        </mat-tab>
+
+        <mat-tab label="Owned"> 
+          <ng-container *ngIf="ownedTeas.length > 0; else noTeas">
+            <ion-card *ngFor="let tea of ownedTeas" class="custom-card">
+              <ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="4">
+                      <img [src]="tea.image" (click)="navigateToTea(tea)" class="custom-image" />
+                    </ion-col>
+                    <ion-col size="8">
+                      <ion-card-title>{{ tea.name }}</ion-card-title>
+                      <ion-card-subtitle>{{ tea.type }}</ion-card-subtitle>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </ng-container>
+        </mat-tab>
+      </mat-tab-group>
+    </ion-card-content>
+  </ion-card>
+
+  <ng-template #noTeas>
+    <div class="no-teas-message">
+      No saved teas in this category.
+    </div>
+  </ng-template>
 </ion-content>

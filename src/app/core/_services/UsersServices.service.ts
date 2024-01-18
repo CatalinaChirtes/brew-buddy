@@ -18,30 +18,17 @@ export class UsersService {
         return this.http.get<UserModel[]>(this.baseUsersPath);
     }
 
-    // public ApiUserGet(id: string): Observable<UserModel[]>{
-    //     return this.http.get<UserModel[]>(
-    //         `${this.baseUserPath}/${id}`
-    //     );
-    // }
-
-    public ApiUserGet(user_id: string): Observable<UserModel[]>{
+    public ApiUserGet(user_id: string): Observable<UserModel>{
         const params = new HttpParams().set('user_id', user_id);
 
-        return this.http.get<UserModel[]>(
+        return this.http.get<UserModel>(
             `${this.baseUserPath}`,
             { params: params }
         );
     }
 
-    // public ApiUserPut(user: UserModel, id: string): Observable<UserModel[]>{
-    //     return this.http.put<UserModel[]>(
-    //         `${this.baseUserPath}/${id}`,
-    //         user
-    //     );
-    // }
-
-    public ApiUserPut(user: UserModel): Observable<UserModel[]>{
-        return this.http.put<UserModel[]>(
+    public ApiUserPut(user: UserModel): Observable<UserModel>{
+        return this.http.put<UserModel>(
             `${this.baseUpdateUserPath}`,
             user
         );
