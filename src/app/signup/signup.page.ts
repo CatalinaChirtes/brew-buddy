@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserService } from '../services/user.service';
 import { UserInputModel } from '../core/_models/auth/UserInputModel';
 import { UsersService } from '../core/_services/UsersServices.service';
 import { AuthService } from '../core/_services/AuthService.service';

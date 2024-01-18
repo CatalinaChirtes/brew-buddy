@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { TeaModel } from 'src/app/core/_models/teas/TeaModel';
 import { TeasService } from 'src/app/core/_services/TeasService.service';
 import { FilterModalPage } from 'src/app/filter-modal/filter-modal.page';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-discover',
@@ -31,7 +30,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
     { name: 'Pentru cunoscatori', checked: false }
   ];
 
-  loggedInUserEmail!: string;
   teasForUser: { favoriteTeas: any[]; ownedTeas: any[] } | null = null;
   private loginSubscription: Subscription | undefined;
 
@@ -39,13 +37,10 @@ export class DiscoverPage implements OnInit, OnDestroy {
     private modalController: ModalController,
     private teasService: TeasService,
     private router: Router,
-    private userService: UserService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    // this.loginSubscription = this.userService.onLogin().subscribe(() => {
-    //   this.fetchUserData();
-    // });
     this.fetchTeas();
   }
 
@@ -56,15 +51,45 @@ export class DiscoverPage implements OnInit, OnDestroy {
   }
 
   private fetchTeas() {
-    this.teasService.ApiTeasGetAll().subscribe(
-      (teas: TeaModel[]) => {
-        this.teas = teas;
-        this.filterItems(); 
-      },
-      (error) => {
-        console.error('Error fetching teas:', error);
-      }
-    );
+    this.route.paramMap.subscribe(params => {
+      this.teasService.ApiTeasGetAll().subscribe(
+        (teas: TeaModel[]) => {
+          this.teas = teas;
+          this.initializeTeaStates();
+          this.filterItems(); 
+        },
+        (error) => {
+          console.error('Error fetching teas:', error);
+        }
+      );
+    });
+  }
+
+  private initializeTeaStates() {
+    const userId = localStorage.getItem('userId');
+
+    if (userId) {
+      this.clickedFavoriteTea = {};
+      this.clickedOwnedTea = {};
+
+      this.teasService.ApiTeaFavouritesGet(userId).subscribe(
+        (favoriteTeas: TeaModel[]) => {
+          favoriteTeas.forEach(tea => this.clickedFavoriteTea[tea.name!] = true);
+        },
+        (error) => {
+          console.error('Error fetching favorite teas:', error);
+        }
+      );
+
+      this.teasService.ApiTeaOwnedGet(userId).subscribe(
+        (ownedTeas: TeaModel[]) => {
+          ownedTeas.forEach(tea => this.clickedOwnedTea[tea.name!] = true);
+        },
+        (error) => {
+          console.error('Error fetching owned teas:', error);
+        }
+      );
+    }
   }
 
   filterItems() {
@@ -111,11 +136,59 @@ export class DiscoverPage implements OnInit, OnDestroy {
   }
 
   toggleFavorite(tea: TeaModel) {
-    this.clickedFavoriteTea[tea.name!] = !this.clickedFavoriteTea[tea.name!];
+    const userId = localStorage.getItem('userId');
+
+    if (userId) {
+      if (this.clickedFavoriteTea[tea.name!]) {
+        // Unfavorite tea
+        this.teasService.ApiTeaFavouritesDelete(tea.id!.toString(), userId).subscribe(
+          () => {
+            this.clickedFavoriteTea[tea.name!] = false;
+          },
+          (error) => {
+            console.error('Error unfavoriting tea:', error);
+          }
+        );
+      } else {
+        // Favorite tea
+        this.teasService.ApiTeaFavouritesPost(tea.id!.toString(), userId).subscribe(
+          () => {
+            this.clickedFavoriteTea[tea.name!] = true;
+          },
+          (error) => {
+            console.error('Error favoriting tea:', error);
+          }
+        );
+      }
+    }
   }
 
   toggleOwned(tea: TeaModel) {
-    this.clickedOwnedTea[tea.name!] = !this.clickedOwnedTea[tea.name!];
+    const userId = localStorage.getItem('userId');
+
+    if (userId) {
+      if (this.clickedOwnedTea[tea.name!]) {
+        // Unown tea
+        this.teasService.ApiTeaOwnedDelete(tea.id!.toString(), userId).subscribe(
+          () => {
+            this.clickedOwnedTea[tea.name!] = false;
+          },
+          (error) => {
+            console.error('Error unowning tea:', error);
+          }
+        );
+      } else {
+        // Own tea
+        this.teasService.ApiTeaOwnedPost(tea.id!.toString(), userId).subscribe(
+          () => {
+            this.clickedOwnedTea[tea.name!] = true;
+          },
+          (error) => {
+            console.error('Error owning tea:', error);
+          }
+        );
+      }
+    }
   }
 
   clearSearch() {
@@ -128,121 +201,4 @@ export class DiscoverPage implements OnInit, OnDestroy {
     localStorage.setItem('selectedTeaId', tea.id!.toString());
     this.router.navigate(['/app/tea']);
   }
-
-//   private fetchUserData() {
-//     const loggedInUser = this.userService.getLoggedInUser();
-//     if (loggedInUser) {
-//       this.loggedInUserEmail = loggedInUser.email;
-//       this.teasForUser = this.userService.getTeasForUser(this.loggedInUserEmail);
-//       if (!this.teasForUser) {
-//         this.teasForUser = {
-//           favoriteTeas: [],
-//           ownedTeas: []
-//         };
-//       }
-//       this.updateFilteredTeas();
-//     }
-//   }
-
-  // private updateFilteredTeas() {
-  //   const { favoriteTeas, ownedTeas } = this.teasForUser || { favoriteTeas: [], ownedTeas: [] };
-  //   const favoriteTeaNames = favoriteTeas.map(tea => tea.name);
-  //   const ownedTeaNames = ownedTeas.map(tea => tea.name);
-  
-  //   this.filteredTeas = this.teas.filter(tea => {
-  //     if (favoriteTeaNames.includes(tea.name)) {
-  //       tea.favorite = true;
-  //     } else {
-  //       tea.favorite = false;
-  //     }
-  
-  //     if (ownedTeaNames.includes(tea.name)) {
-  //       tea.owned = true;
-  //     } else {
-  //       tea.owned = false;
-  //     }
-  
-  //     return tea;
-  //   });
-  // }
-
-//   toggleFavorite(tea: any) {
-//     tea.favorite = !tea.favorite;
-//     if (tea.favorite) {
-//       tea.owned = false;
-//       this.updateTeaData(tea);
-//     } else {
-//       this.removeTeaFromLists(tea);
-//     }
-//   }
-
-//   toggleOwned(tea: any) {
-//     tea.owned = !tea.owned;
-//     if (tea.owned) {
-//       tea.favorite = false;
-//       this.updateTeaData(tea);
-//     } else {
-//       this.removeTeaFromLists(tea);
-//     }
-//   }
-
-//   private removeTeaFromLists(tea: any) {
-//     if (!this.teasForUser) {
-//       return;
-//     }
-
-//     const updatedFavoriteTeas = (this.teasForUser.favoriteTeas || []).filter(
-//       (t: any) => t.name !== tea.name
-//     );
-//     const updatedOwnedTeas = (this.teasForUser.ownedTeas || []).filter(
-//       (t: any) => t.name !== tea.name
-//     );
-
-//     this.teasForUser = {
-//       favoriteTeas: updatedFavoriteTeas,
-//       ownedTeas: updatedOwnedTeas,
-//     };
-
-//     this.userService.setTeasForUser(this.loggedInUserEmail, this.teasForUser);
-//     this.updateFilteredTeas();
-//   }
-
-//   private updateTeaData(tea: any) {
-//     if (!this.teasForUser) {
-//       this.teasForUser = {
-//         favoriteTeas: [],
-//         ownedTeas: []
-//       };
-//     }
-  
-//     const storedFavoriteTeas = this.teasForUser.favoriteTeas || [];
-//     const storedOwnedTeas = this.teasForUser.ownedTeas || [];
-  
-//     const updatedFavoriteTeas = storedFavoriteTeas.filter((t: any) => t.name !== tea.name);
-//     const updatedOwnedTeas = storedOwnedTeas.filter((t: any) => t.name !== tea.name);
-  
-//     if (tea.favorite && !tea.owned) {
-//       updatedFavoriteTeas.push(tea);
-//     } else if (tea.owned && !tea.favorite) {
-//       updatedOwnedTeas.push(tea);
-//     }
-  
-//     if (!tea.favorite && !tea.owned) {
-//       // Remove the tea from both lists if neither favorite nor owned
-//       const updatedFavoriteTeasFiltered = updatedFavoriteTeas.filter((t: any) => t.name !== tea.name);
-//       const updatedOwnedTeasFiltered = updatedOwnedTeas.filter((t: any) => t.name !== tea.name);
-//       this.teasForUser = {
-//         favoriteTeas: updatedFavoriteTeasFiltered,
-//         ownedTeas: updatedOwnedTeasFiltered
-//       };
-//     } else {
-//       this.teasForUser = {
-//         favoriteTeas: updatedFavoriteTeas,
-//         ownedTeas: updatedOwnedTeas
-//       };
-//     }
-  
-//     this.userService.setTeasForUser(this.loggedInUserEmail, this.teasForUser);
-//     this.updateFilteredTeas(); // Update filteredTeas after setting teasForUser
-//   }
 }

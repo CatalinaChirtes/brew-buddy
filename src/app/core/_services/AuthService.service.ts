@@ -16,9 +16,16 @@ export class AuthService {
     private baseLogoutPath = environment.apiUrlLogout;
     private baseSignupPath = environment.apiUrlSignup;
 
-    public ApiLoginPost(user_login: UserLoginModel): Observable<UserLoginModel[]>{
-        return this.http.post<UserLoginModel[]>(
-            this.baseLoginPath,
+    // public ApiLoginPost(user_login: UserLoginModel): Observable<UserLoginModel[]>{
+    //     return this.http.post<UserLoginModel[]>(
+    //         this.baseLoginPath,
+    //         user_login
+    //     );
+    // }
+
+    public ApiLoginPost(user_login: UserLoginModel): Observable<UserModel> {
+        return this.http.post<UserModel>(
+            this.baseLoginPath, 
             user_login
         );
     }

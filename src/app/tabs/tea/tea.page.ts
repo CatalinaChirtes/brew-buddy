@@ -48,6 +48,7 @@ export class TeaPage implements OnInit {
       }
     });
   }
+  
   navigateToDiscover() {
     this.resetMaxTimer();
     this.resetMinTimer();

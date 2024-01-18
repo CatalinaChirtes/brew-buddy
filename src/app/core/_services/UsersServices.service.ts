@@ -1,4 +1,4 @@
-import { HttpParameterCodec, HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpParameterCodec, HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable, Optional, Inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -12,27 +12,38 @@ export class UsersService {
 
     private baseUsersPath = environment.apiUrlUsers;
     private baseUserPath = environment.apiUrlUser;
+    private baseUpdateUserPath = environment.apiUrlUpdateUser;
 
     public ApiUsersGetAll(): Observable<UserModel[]>{
         return this.http.get<UserModel[]>(this.baseUsersPath);
     }
 
-    public ApiUserGet(id: string): Observable<UserModel[]>{
+    // public ApiUserGet(id: string): Observable<UserModel[]>{
+    //     return this.http.get<UserModel[]>(
+    //         `${this.baseUserPath}/${id}`
+    //     );
+    // }
+
+    public ApiUserGet(user_id: string): Observable<UserModel[]>{
+        const params = new HttpParams().set('user_id', user_id);
+
         return this.http.get<UserModel[]>(
-            `${this.baseUserPath}/${id}`
+            `${this.baseUserPath}`,
+            { params: params }
         );
     }
 
-    public ApiUserPut(user: UserModel, id: string): Observable<UserModel[]>{
+    // public ApiUserPut(user: UserModel, id: string): Observable<UserModel[]>{
+    //     return this.http.put<UserModel[]>(
+    //         `${this.baseUserPath}/${id}`,
+    //         user
+    //     );
+    // }
+
+    public ApiUserPut(user: UserModel): Observable<UserModel[]>{
         return this.http.put<UserModel[]>(
-            `${this.baseUserPath}/${id}`,
+            `${this.baseUpdateUserPath}`,
             user
-        );
-    }
-
-    public ApiUserDelete(id: string): Observable<UserModel[]>{
-        return this.http.delete<UserModel[]>(
-            `${this.baseUserPath}/${id}`
         );
     }
 }

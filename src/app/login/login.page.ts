@@ -3,9 +3,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../core/_services/AuthService.service';
 import { UserLoginModel } from '../core/_models/auth/UserLoginModel';
-import { UserModel } from '../core/_models/users/UserModel';
 import { UsersService } from '../core/_services/UsersServices.service';
-import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -17,8 +15,6 @@ export class LoginPage implements OnInit {
     email: '',
     password: '',
   };
-
-  // public user!: UserModel;
 
   constructor(
     private router: Router,
@@ -38,13 +34,8 @@ export class LoginPage implements OnInit {
     this.authService.ApiLoginPost(this.loginUser).subscribe(
       (response) => {
         console.log(response);
+        localStorage.setItem('userId', response.id?.toString() || '');
         this.router.navigate(['/app']);
-
-        this.snackBar.open("Signed in successfully.", 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-        });
 
         return response;
       },

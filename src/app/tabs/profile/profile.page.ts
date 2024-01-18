@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/_services/AuthService.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -36,6 +35,7 @@ export class ProfilePage {
   public logout(): void {
     this.authService.ApiLogoutGet().subscribe(response => console.log(response))
     this.authService.ApiLogoutGet();
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
 }

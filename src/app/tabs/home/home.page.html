@@ -13,5 +13,27 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Home page"></app-explore-container>
+  <ng-container *ngIf="teas.length > 0; else noTeas">
+    <ion-card *ngFor="let tea of teas" class="custom-card">
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <img [src]="tea.image" (click)="navigateToTea(tea)" class="custom-image" />
+            </ion-col>
+            <ion-col size="6" class="tea_img">
+              <ion-card-title>{{ tea.name }}</ion-card-title>
+              <ion-card-subtitle>{{ tea.type }}</ion-card-subtitle>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #noTeas>
+    <div class="no-teas-message">
+      No favourite owned teas.
+    </div>
+  </ng-template>
 </ion-content>
